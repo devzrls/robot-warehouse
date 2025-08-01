@@ -1,0 +1,40 @@
+#!/usr/bin/env ruby
+require_relative "../lib/robot"
+
+class RobotCLI
+  def initialize
+    @robot = Robot.new
+    @running = true
+  end
+
+  def start
+    puts "Robot Warehouse CLI"
+    puts "Robot started at position: #{robot.position}"
+    puts "Enter commands N,S,E,W (comma-separated) to move the robot, or type 'exit' to quit."
+    puts
+
+    while running
+      print "> "
+      input = gets.chomp.strip
+
+      case input.downcase
+      when "exit"
+        puts "Exiting the Robot Warehouse CLI."
+        @running = false
+      else
+        begin
+          robot.execute(input)
+          puts "Robot moved to position: #{robot.position}"
+        rescue ArgumentError => e
+          puts "Error: #{e.message}"
+        end
+      end
+    end
+  end
+
+  private
+
+  attr_reader :robot, :running
+end
+
+RobotCLI.new.start if __FILE__ == $0
