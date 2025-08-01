@@ -1,5 +1,9 @@
 class Robot
   VALID_COMMANDS = %w[N S E W].freeze
+  GRID_X_MAX = 9
+  GRID_X_MIN = 0
+  GRID_Y_MAX = 9
+  GRID_Y_MIN = 0
 
   def initialize(x: 0, y: 0)
     @x = x
@@ -13,13 +17,29 @@ class Robot
     commands.each do |cmd|
       case cmd
       when "N"
-        @y += 1
+        if @y < GRID_Y_MAX
+          @y += 1
+        else
+          break
+        end
       when "S"
-        @y -= 1
+        if @y > GRID_Y_MIN
+          @y -= 1
+        else
+          break
+        end
       when "E"
-        @x += 1
+        if @x < GRID_X_MAX
+          @x += 1
+        else
+          break
+        end
       when "W"
-        @x -= 1
+        if @x > GRID_X_MIN
+          @x -= 1
+        else
+          break
+        end
       end
     end
   end

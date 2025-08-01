@@ -8,12 +8,32 @@ RSpec.describe Robot do
       expect(robot.position).to eq([0, 1])
     end
 
-    it "executes a csv of commands" do
+    it "executes csv commands" do
       robot = Robot.new
 
       robot.execute("N,E")
 
       expect(robot.position).to eq([1, 1])
+    end
+
+    context "command sequence N,E,S,W" do
+      it "moves the robot back to where it started" do
+        robot = Robot.new
+
+        robot.execute("N,E,S,W")
+
+        expect(robot.position).to eq([0, 0])
+      end
+    end
+
+    context "command sequence N,E,N,E,N,E,N,E" do
+      it "moves the robot to the correct position" do
+        robot = Robot.new
+
+        robot.execute("N,E,N,E,N,E,N,E")
+
+        expect(robot.position).to eq([4, 4])
+      end
     end
 
     context "invalid commands" do
@@ -42,23 +62,37 @@ RSpec.describe Robot do
       end
     end
 
-    context "command sequence N,E,S,W" do
-      it "moves the robot back to where it started" do
-        robot = Robot.new
+    context "boundaries" do
+      it "terminates execution if robot hits negative x boundary" do
+        robot = Robot.new(x: 0, y: 0)
 
-        robot.execute("N,E,S,W")
+        robot.execute("W")
 
         expect(robot.position).to eq([0, 0])
       end
-    end
 
-    context "command sequence N,E,N,E,N,E,N,E" do
-      it "moves the robot to the correct position" do
-        robot = Robot.new
+      it "terminates execution if robot hits negative y boundary" do
+        robot = Robot.new(x: 0, y: 0)
 
-        robot.execute("N,E,N,E,N,E,N,E")
+        robot.execute("S")
 
-        expect(robot.position).to eq([4, 4])
+        expect(robot.position).to eq([0, 0])
+      end
+
+      it "terminates execution if robot hits positive x boundary" do
+        robot = Robot.new(x: 0, y: 0)
+
+        robot.execute(10.times.map { "E" }.join(","))
+
+        expect(robot.position).to eq([9, 0])
+      end
+
+      it "terminates execution if robot hits positive y boundary" do
+        robot = Robot.new(x: 0, y: 0)
+
+        robot.execute(10.times.map { "N" }.join(","))
+
+        expect(robot.position).to eq([0, 9])
       end
     end
   end
