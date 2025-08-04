@@ -1,15 +1,16 @@
 #!/usr/bin/env ruby
 require_relative "../lib/robot"
+require_relative "../lib/position"
 
 class RobotCLI
   def initialize
-    @robot = Robot.new
+    @robot = Robot.new(position: Position.new(x: 0, y: 0))
     @running = true
   end
 
   def start
     puts "Robot Warehouse CLI"
-    puts "Robot started at position: #{robot.position}"
+    puts "Robot started at position: #{robot.current_position}"
     puts "Enter commands N,S,E,W (comma-separated) to move the robot, or type 'exit' to quit."
     puts
 
@@ -24,7 +25,7 @@ class RobotCLI
       else
         begin
           robot.execute(input)
-          puts "Robot moved to position: #{robot.position}"
+          puts "Robot moved to position: #{robot.current_position}"
         rescue ArgumentError => e
           puts "Error: #{e.message}"
         end

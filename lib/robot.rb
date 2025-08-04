@@ -1,13 +1,18 @@
 class Robot
-  VALID_COMMANDS = %w[N S E W].freeze
+  VALID_MOVE_COMMANDS = {
+    "N" => [0, 1],
+    "S" => [0, -1],
+    "E" => [1, 0],
+    "W" => [-1, 0]
+  }.freeze
+
   GRID_X_MAX = 9
   GRID_X_MIN = 0
   GRID_Y_MAX = 9
   GRID_Y_MIN = 0
 
-  def initialize(x: 0, y: 0)
-    @x = x
-    @y = y
+  def initialize(position: Position.new)
+    @position = position
   end
 
   def execute(command)
@@ -17,8 +22,8 @@ class Robot
     commands.each { |cmd| move(cmd) }
   end
 
-  def position
-    [@x, @y]
+  def current_position
+    @position.to_a
   end
 
   private
@@ -31,7 +36,7 @@ class Robot
     raise ArgumentError, "Missing command" if commands.empty?
 
     commands.each do |cmd|
-      unless VALID_COMMANDS.include?(cmd)
+      unless VALID_MOVE_COMMANDS.key?(cmd)
         raise ArgumentError, "Unknown command: #{cmd}"
       end
     end
@@ -39,47 +44,17 @@ class Robot
   end
 
   def move(command)
-    case command
-    when "N"
-      move_north
-    when "S"
-      move_south
-    when "E"
-      move_east
-    when "W"
-      move_west
-    end
-  end
+    step = VALID_MOVE_COMMANDS[command]
+    new_position = @position.move_by(step)
 
-  def move_north
-    if @y < GRID_Y_MAX
-      @y += 1
+    if valid_position?(new_position)
+      @position = new_position
     else
       raise ArgumentError, "Invalid move"
     end
   end
 
-  def move_south
-    if @y > GRID_Y_MIN
-      @y -= 1
-    else
-      raise ArgumentError, "Invalid move"
-    end
+  def valid_position?(position)
+    position.x.between?(GRID_X_MIN, GRID_X_MAX) && position.y.between?(GRID_Y_MIN, GRID_Y_MAX)
   end
-
-  def move_east
-    if @x < GRID_X_MAX
-      @x += 1
-    else
-      raise ArgumentError, "Invalid move"
-    end
-  end
-
-  def move_west
-    if @x > GRID_X_MIN
-      @x -= 1
-    else
-      raise ArgumentError, "Invalid move"
-    end
-  end 
 end

@@ -5,7 +5,7 @@ RSpec.describe Robot do
 
       robot.execute("N")
 
-      expect(robot.position).to eq([0, 1])
+      expect(robot.current_position).to eq([0, 1])
     end
 
     it "executes csv commands" do
@@ -13,7 +13,7 @@ RSpec.describe Robot do
 
       robot.execute("N,E")
 
-      expect(robot.position).to eq([1, 1])
+      expect(robot.current_position).to eq([1, 1])
     end
 
     context "command sequence N,E,S,W" do
@@ -22,7 +22,7 @@ RSpec.describe Robot do
 
         robot.execute("N,E,S,W")
 
-        expect(robot.position).to eq([0, 0])
+        expect(robot.current_position).to eq([0, 0])
       end
     end
 
@@ -32,7 +32,7 @@ RSpec.describe Robot do
 
         robot.execute("N,E,N,E,N,E,N,E")
 
-        expect(robot.position).to eq([4, 4])
+        expect(robot.current_position).to eq([4, 4])
       end
     end
 
@@ -64,35 +64,35 @@ RSpec.describe Robot do
 
     context "boundaries" do
       it "terminates execution if robot hits negative x boundary" do
-        robot = Robot.new(x: 0, y: 0)
+        robot = Robot.new
 
         expect { robot.execute("W") }.to raise_error(ArgumentError, "Invalid move")
 
-        expect(robot.position).to eq([0, 0])
+        expect(robot.current_position).to eq([0, 0])
       end
 
       it "terminates execution if robot hits negative y boundary" do
-        robot = Robot.new(x: 0, y: 0)
+        robot = Robot.new
 
         expect { robot.execute("S") }.to raise_error(ArgumentError, "Invalid move")
 
-        expect(robot.position).to eq([0, 0])
+        expect(robot.current_position).to eq([0, 0])
       end
 
       it "terminates execution if robot hits positive x boundary" do
-        robot = Robot.new(x: 0, y: 0)
+        robot = Robot.new
 
         expect { robot.execute(10.times.map { "E" }.join(",")) }.to raise_error(ArgumentError, "Invalid move")
 
-        expect(robot.position).to eq([9, 0])
+        expect(robot.current_position).to eq([9, 0])
       end
 
       it "terminates execution if robot hits positive y boundary" do
-        robot = Robot.new(x: 0, y: 0)
+        robot = Robot.new
 
         expect { robot.execute(10.times.map { "N" }.join(",")) }.to raise_error(ArgumentError, "Invalid move")
 
-        expect(robot.position).to eq([0, 9])
+        expect(robot.current_position).to eq([0, 9])
       end
     end
   end
