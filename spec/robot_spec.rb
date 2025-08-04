@@ -66,7 +66,7 @@ RSpec.describe Robot do
       it "terminates execution if robot hits negative x boundary" do
         robot = Robot.new(x: 0, y: 0)
 
-        robot.execute("W")
+        expect { robot.execute("W") }.to raise_error(ArgumentError, "Invalid move")
 
         expect(robot.position).to eq([0, 0])
       end
@@ -74,7 +74,7 @@ RSpec.describe Robot do
       it "terminates execution if robot hits negative y boundary" do
         robot = Robot.new(x: 0, y: 0)
 
-        robot.execute("S")
+        expect { robot.execute("S") }.to raise_error(ArgumentError, "Invalid move")
 
         expect(robot.position).to eq([0, 0])
       end
@@ -82,7 +82,7 @@ RSpec.describe Robot do
       it "terminates execution if robot hits positive x boundary" do
         robot = Robot.new(x: 0, y: 0)
 
-        robot.execute(10.times.map { "E" }.join(","))
+        expect { robot.execute(10.times.map { "E" }.join(",")) }.to raise_error(ArgumentError, "Invalid move")
 
         expect(robot.position).to eq([9, 0])
       end
@@ -90,7 +90,7 @@ RSpec.describe Robot do
       it "terminates execution if robot hits positive y boundary" do
         robot = Robot.new(x: 0, y: 0)
 
-        robot.execute(10.times.map { "N" }.join(","))
+        expect { robot.execute(10.times.map { "N" }.join(",")) }.to raise_error(ArgumentError, "Invalid move")
 
         expect(robot.position).to eq([0, 9])
       end

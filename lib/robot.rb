@@ -11,37 +11,10 @@ class Robot
   end
 
   def execute(command)
-    commands = command_parser(command)
-    commands = command_validator(commands)
+    commands = parse_command(command)
+    commands = validate_command(commands)
 
-    commands.each do |cmd|
-      case cmd
-      when "N"
-        if @y < GRID_Y_MAX
-          @y += 1
-        else
-          break
-        end
-      when "S"
-        if @y > GRID_Y_MIN
-          @y -= 1
-        else
-          break
-        end
-      when "E"
-        if @x < GRID_X_MAX
-          @x += 1
-        else
-          break
-        end
-      when "W"
-        if @x > GRID_X_MIN
-          @x -= 1
-        else
-          break
-        end
-      end
-    end
+    commands.each { |cmd| move(cmd) }
   end
 
   def position
@@ -50,11 +23,11 @@ class Robot
 
   private
 
-  def command_parser(command)
+  def parse_command(command)
     command.split(",").map(&:strip)
   end
 
-  def command_validator(commands)
+  def validate_command(commands)
     raise ArgumentError, "Missing command" if commands.empty?
 
     commands.each do |cmd|
@@ -64,4 +37,49 @@ class Robot
     end
     commands
   end
+
+  def move(command)
+    case command
+    when "N"
+      move_north
+    when "S"
+      move_south
+    when "E"
+      move_east
+    when "W"
+      move_west
+    end
+  end
+
+  def move_north
+    if @y < GRID_Y_MAX
+      @y += 1
+    else
+      raise ArgumentError, "Invalid move"
+    end
+  end
+
+  def move_south
+    if @y > GRID_Y_MIN
+      @y -= 1
+    else
+      raise ArgumentError, "Invalid move"
+    end
+  end
+
+  def move_east
+    if @x < GRID_X_MAX
+      @x += 1
+    else
+      raise ArgumentError, "Invalid move"
+    end
+  end
+
+  def move_west
+    if @x > GRID_X_MIN
+      @x -= 1
+    else
+      raise ArgumentError, "Invalid move"
+    end
+  end 
 end
