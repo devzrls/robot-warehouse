@@ -6,12 +6,8 @@ class Robot
     "W" => [-1, 0]
   }.freeze
 
-  GRID_X_MAX = 9
-  GRID_X_MIN = 0
-  GRID_Y_MAX = 9
-  GRID_Y_MIN = 0
-
-  def initialize(position: Position.new)
+  def initialize(position: Position.new, warehouse: Warehouse.new)
+    @warehouse = warehouse
     @position = position
   end
 
@@ -47,14 +43,10 @@ class Robot
     step = VALID_MOVE_COMMANDS[command]
     new_position = @position.move_by(step)
 
-    if valid_position?(new_position)
+    if @warehouse.contains?(new_position)
       @position = new_position
     else
       raise ArgumentError, "Invalid move"
     end
-  end
-
-  def valid_position?(position)
-    position.x.between?(GRID_X_MIN, GRID_X_MAX) && position.y.between?(GRID_Y_MIN, GRID_Y_MAX)
   end
 end
