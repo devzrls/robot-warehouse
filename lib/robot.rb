@@ -1,3 +1,6 @@
+require_relative "boundary_error"
+require_relative "command_error"
+
 class Robot
   VALID_MOVE_COMMANDS = {
     "N" => [0, 1],
@@ -29,11 +32,11 @@ class Robot
   end
 
   def validate_command(commands)
-    raise ArgumentError, "Missing command" if commands.empty?
+    raise CommandError.new("") if commands.empty?
 
     commands.each do |cmd|
       unless VALID_MOVE_COMMANDS.key?(cmd)
-        raise ArgumentError, "Unknown command: #{cmd}"
+        raise CommandError.new(cmd)
       end
     end
     commands
@@ -46,7 +49,7 @@ class Robot
     if @warehouse.contains?(new_position)
       @position = new_position
     else
-      raise ArgumentError, "Invalid move"
+      raise BoundaryError.new(command, @position)
     end
   end
 end

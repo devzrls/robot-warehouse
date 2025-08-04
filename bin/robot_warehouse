@@ -27,8 +27,10 @@ class RobotCLI
         begin
           robot.execute(input)
           puts "Robot moved to position: #{robot.current_position}"
-        rescue ArgumentError => e
-          puts "Error: #{e.message}"
+        rescue CommandError => e
+          puts "Command Error: #{e.message}"
+        rescue BoundaryError => e
+          puts "Boundary Error: #{e.message}"
         end
       end
     end
