@@ -8,7 +8,7 @@ class Position
   end
 
   def to_a
-    [@x, @y]
+    [x, y]
   end
 
   def move_by(step)
